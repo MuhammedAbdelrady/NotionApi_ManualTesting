@@ -1,0 +1,959 @@
+{
+	"info": {
+		"_postman_id": "996390ca-60b4-4c3c-8dac-622a4a670956",
+		"name": "Notion",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23765665"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Get user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 400', function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"})\r",
+									"\r",
+									"pm.test('Response contains user ID', function () {\r",
+									"    pm.expect(pm.response.text()).to.include('86c34bdf-d275-484b-b11b-7a789f5323cb');\r",
+									"})\r",
+									"\r",
+									"pm.test('Response Body include type', function () {\r",
+									"    var responseBody = pm.response.json();\r",
+									"    pm.expect(responseBody).to.have.property('id','86c34bdf-d275-484b-b11b-7a789f5323cb');\r",
+									"    pm.expect(responseBody).to.have.property('type', 'bot');\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Workspace is right\", function () {\r",
+									"  var responseBody = pm.response.json();\r",
+									"  pm.expect(responseBody.bot.workspace_name).to.equal('Muhammad');\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "secret_hubRpQO9kGAMuFrKN9t7asAKBhlLIrRaNiBkkdHiHXT",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Notion-Version",
+								"value": "2022-06-28",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer secret_hubRpQO9kGAMuFrKN9t7asAKBhlLIrRaNiBkkdHiHXT",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "https://api.notion.com/v1/users/me",
+							"protocol": "https",
+							"host": [
+								"api",
+								"notion",
+								"com"
+							],
+							"path": [
+								"v1",
+								"users",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(403);        //Forbidden\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response body indicates Forbidden\", function () {\r",
+									"    var responseBody = pm.response.json();\r",
+									"    pm.expect(responseBody).to.have.property('message', 'Insufficient permissions for this endpoint.');\r",
+									"    pm.expect(responseBody).to.have.property('code','restricted_resource');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.notion.com/v1/users",
+							"protocol": "https",
+							"host": [
+								"api",
+								"notion",
+								"com"
+							],
+							"path": [
+								"v1",
+								"users"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Database",
+			"item": [
+				{
+					"name": "Create New Database (invalid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"pm.test(\"Error is found\", function(){\r",
+									"    pm.expect(pm.response.json()).to.have.property('object','error');\r",
+									"});\r",
+									"pm.test(\"error found\", function () {\r",
+									"    pm.expect(pm.response.json().object).to.exist;\r",
+									"    pm.expect(pm.response.json().status).to.exist;\r",
+									"    pm.expect(pm.response.json().code).to.exist;\r",
+									"    pm.expect(pm.response.json().message).to.exist;\r",
+									"    pm.expect(pm.response.json().developer_survey).to.exist;\r",
+									"    pm.expect(pm.response.json().request_id).to.exist;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"parent\" : {\r\n        \"type\" : \"page_id\",\r\n        \"page_id\" : \"b3d5f093fe9e45989111496bd40e1537\"\r\n    },\r\n    \"title\": [\r\n        {\r\n            \"type\": \"text\",\r\n            \"text\": {\r\n                \"content\": \"Arsenal 07/08 Squad\"\r\n            }\r\n        }\r\n    ],\r\n    \"properties\" : {\r\n        \"Name\": {\r\n            \"title\": {}\r\n        }\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.notion.com/v1/databases/",
+							"protocol": "https",
+							"host": [
+								"api",
+								"notion",
+								"com"
+							],
+							"path": [
+								"v1",
+								"databases",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create New Database",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response time is within acceptable limits\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+									"});\r",
+									"pm.test('Status code is 200', function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('Response has a valid JSON body', function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include('Arsenal 07/08 Squad');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains expected headers\", function () {\r",
+									"    var x = pm.response.headers.has('Content-Type');\r",
+									"    if (x === true) {\r",
+									"        pm.test(\"Content type is JSON\", function () {\r",
+									"            pm.response.to.have.header('Content-Type', 'application/json; charset=utf-8');\r",
+									"        });\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response body size is within acceptable limits\", function () {\r",
+									"    pm.expect(pm.response.responseSize).to.be.below(800 * 800);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Request size is within acceptable limits\", function () {\r",
+									"    pm.expect(pm.request.body.size).to.be.below(800 * 800);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"parent\" : {\r\n        \"type\" : \"page_id\",\r\n        \"page_id\" : \"b3d5f093fe9e45989111496bd40e1535\"\r\n    },\r\n    \"title\": [\r\n        {\r\n            \"type\": \"text\",\r\n            \"text\": {\r\n                \"content\": \"Arsenal 07/08 Squad\"\r\n            }\r\n        }\r\n    ],\r\n    \"properties\" : {\r\n        \"Name\": {\r\n            \"title\": {}\r\n        }\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.notion.com/v1/databases/",
+							"protocol": "https",
+							"host": [
+								"api",
+								"notion",
+								"com"
+							],
+							"path": [
+								"v1",
+								"databases",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve Database",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"})\r",
+									"\r",
+									"pm.test('Matched database ID', function () {\r",
+									"    var url = pm.request.url.toString();\r",
+									"    var databaseId = url.match(/\\/databases\\/([^\\/]+)/)[1];\r",
+									"    pm.environment.set('databaseId', databaseId);\r",
+									"    var responseBody = pm.response.json();\r",
+									"    var responseIdWithoutHyphens = responseBody.id.replace(/-/g, '');\r",
+									"    pm.expect(responseIdWithoutHyphens).to.eql(databaseId);\r",
+									"})\r",
+									"\r",
+									"pm.test('Response time is less than 500ms', function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+									"})\r",
+									"\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has expected structure\", function () {\r",
+									"    pm.expect(pm.response.json()).to.have.property('object').that.eql('database');\r",
+									"    pm.expect(pm.response.json()).to.have.property('id').that.is.a('string');\r",
+									"    pm.expect(pm.response.json()).to.have.property('cover').that.is.null;\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.notion.com/v1/databases/:id",
+							"protocol": "https",
+							"host": [
+								"api",
+								"notion",
+								"com"
+							],
+							"path": [
+								"v1",
+								"databases",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "4d5ff65bac3c4a96820928bf828ceced"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve Database (invalid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 404', function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Error is found\", function(){\r",
+									"    pm.expect(pm.response.json()).to.have.property('object','error');\r",
+									"});\r",
+									"pm.test(\"error found\", function () {\r",
+									"    pm.expect(pm.response.json().object).to.exist;\r",
+									"    pm.expect(pm.response.json().status).to.exist;\r",
+									"    pm.expect(pm.response.json().code).to.exist;\r",
+									"    pm.expect(pm.response.json().message).to.exist;\r",
+									"    pm.expect(pm.response.json().developer_survey).to.exist;\r",
+									"    pm.expect(pm.response.json().request_id).to.exist;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 500ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.notion.com/v1/databases/:id",
+							"protocol": "https",
+							"host": [
+								"api",
+								"notion",
+								"com"
+							],
+							"path": [
+								"v1",
+								"databases",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "4d5ff65bac3c4a96820928bf828cecee"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Pages",
+			"item": [
+				{
+					"name": "Create new Page",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var reqBody = JSON.parse(pm.request.body);\r",
+									"var databaseID = reqBody.parent.database_id;\r",
+									"\r",
+									"var resbody = pm.response.json();\r",
+									"var resID = resbody.parent.database_id.replace(/-/g, '');\r",
+									"\r",
+									"pm.test(\"Created in the right place\", function(){\r",
+									"    pm.expect(resID).to.eql(databaseID);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"parent\": {\r\n        \"database_id\": \"bcd96454c73f4c859ba62b58560d7ead\"\r\n    },\r\n    \"properties\": {\r\n        \"Name\": {\r\n            \"title\": [\r\n                {\r\n                    \"text\": {\r\n                        \"content\": \"jude bellingham\"\r\n                    }\r\n                }\r\n            ]\r\n        }\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.notion.com/v1/pages/",
+							"protocol": "https",
+							"host": [
+								"api",
+								"notion",
+								"com"
+							],
+							"path": [
+								"v1",
+								"pages",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Archive page",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var url = pm.request.url.toString();\r",
+									"var pageID = url.match(/\\/pages\\/([^\\/]+)/)[1];\r",
+									"var resID = pm.response.json();\r",
+									"var resPageID = resID.id.replace(/-/g, '');\r",
+									"\r",
+									"pm.test(\"the target page was archived successfully\", function(){\r",
+									"    pm.expect(resPageID).to.eql(pageID);\r",
+									"});\r",
+									"pm.test(\"Response has correct Cache-Control headers\", function () {\r",
+									"    pm.response.to.have.header(\"CF-Cache-Status\", \"DYNAMIC\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "https://api.notion.com/v1/pages/:id",
+							"protocol": "https",
+							"host": [
+								"api",
+								"notion",
+								"com"
+							],
+							"path": [
+								"v1",
+								"pages",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "72dd56de4ef140d184f7db08fece3faf"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Delete Block",
+			"item": [
+				{
+					"name": "Delete a block (deleted)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"// Define deletedBlockId variable\r",
+									"var deletedBlockId = \"63eb21a0b06e4975a6972ce981e33b0a\";\r",
+									"\r",
+									"pm.sendRequest({\r",
+									"    url: `https://api.notion.com/v1/blocks/${deletedBlockId}`,\r",
+									"    method : 'DELETE',\r",
+									"    header : {\r",
+									"        'Authorization': 'Bearer secret_hubRpQO9kGAMuFrKN9t7asAKBhlLIrRaNiBkkdHiHXT',\r",
+									"        'Content-Type': 'application/json',\r",
+									"        'Notion-Version' : '2022-06-28'\r",
+									"    }\r",
+									"}, function(err, response){\r",
+									"    pm.expect(response).to.have.status(404); // Fixed the expected status code to 200\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Notion-Version",
+								"value": "{{NOTION_VERSION}}",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://api.notion.com/v1/blocks/:id",
+							"protocol": "https",
+							"host": [
+								"api",
+								"notion",
+								"com"
+							],
+							"path": [
+								"v1",
+								"blocks",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "63eb21a0b06e4975a6972ce981e33b0a"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200 Success - Delete a block",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Notion-Version",
+										"value": "{{NOTION_VERSION}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://api.notion.com/v1/blocks/:id",
+									"protocol": "https",
+									"host": [
+										"api",
+										"notion",
+										"com"
+									],
+									"path": [
+										"v1",
+										"blocks",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{BLOCK_ID}}"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Thu, 24 Feb 2022 22:26:40 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Set-Cookie",
+									"value": "notion_browser_id=aa7fa731-b5ed-4e45-abdd-adb4223f12ce; Domain=www.notion.so; Path=/; Expires=Fri, 24 Feb 2023 22:26:36 GMT; Secure"
+								},
+								{
+									"key": "Set-Cookie",
+									"value": "notion_experiment_device_id=f70a2b27-ed37-4387-93fe-494c9a385a83; Domain=www.notion.so; Path=/; Expires=Fri, 24 Feb 2023 22:26:36 GMT; Secure"
+								},
+								{
+									"key": "Set-Cookie",
+									"value": "notion_check_cookie_consent=false; Domain=www.notion.so; Path=/; Expires=Fri, 25 Feb 2022 22:26:36 GMT; Secure"
+								},
+								{
+									"key": "X-DNS-Prefetch-Control",
+									"value": "off"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "SAMEORIGIN"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=5184000; includeSubDomains"
+								},
+								{
+									"key": "X-Download-Options",
+									"value": "noopen"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Content-Security-Policy",
+									"value": "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://gist.github.com https://apis.google.com https://cdn.amplitude.com https://api.amplitude.com https://hkfxbbdzib.notion.so https://widget.intercom.io https://js.intercomcdn.com https://logs-01.loggly.com https://cdn.segment.com https://analytics.pgncs.notion.so https://o324374.ingest.sentry.io https://checkout.stripe.com https://js.stripe.com https://embed.typeform.com https://admin.typeform.com https://public.profitwell.com js.sentry-cdn.com https://js.chilipiper.com https://platform.twitter.com https://cdn.syndication.twimg.com; connect-src 'self' https://msgstore.www.notion.so wss://msgstore.www.notion.so ws://localhost:* ws://127.0.0.1:* https://notion-emojis.s3-us-west-2.amazonaws.com https://s3-us-west-2.amazonaws.com https://s3.us-west-2.amazonaws.com https://notion-production-snapshots-2.s3.us-west-2.amazonaws.com https: http: https://cdn.amplitude.com https://api.amplitude.com https://hkfxbbdzib.notion.so https://api.embed.ly https://js.intercomcdn.com https://api-iam.intercom.io wss://nexus-websocket-a.intercom.io https://logs-01.loggly.com https://cdn.segment.com https://api.segment.io https://analytics.pgncs.notion.so https://api.pgncs.notion.so https://o324374.ingest.sentry.io https://checkout.stripe.com https://js.stripe.com https://cdn.contentful.com https://preview.contentful.com https://images.ctfassets.net https://www2.profitwell.com https://tracking.chilipiper.com https://api.chilipiper.com https://api.unsplash.com https://boards-api.greenhouse.io https://api.statuspage.io https://pgncd.notion.so https://api.statsig.com; font-src 'self' data: https://cdnjs.cloudflare.com https://js.intercomcdn.com; img-src 'self' data: blob: https: https://platform.twitter.com https://syndication.twitter.com https://pbs.twimg.com https://ton.twimg.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://github.githubassets.com https://js.chilipiper.com https://platform.twitter.com https://ton.twimg.com; frame-src https: http:; media-src https: http:"
+								},
+								{
+									"key": "X-Content-Security-Policy",
+									"value": "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://gist.github.com https://apis.google.com https://cdn.amplitude.com https://api.amplitude.com https://hkfxbbdzib.notion.so https://widget.intercom.io https://js.intercomcdn.com https://logs-01.loggly.com https://cdn.segment.com https://analytics.pgncs.notion.so https://o324374.ingest.sentry.io https://checkout.stripe.com https://js.stripe.com https://embed.typeform.com https://admin.typeform.com https://public.profitwell.com js.sentry-cdn.com https://js.chilipiper.com https://platform.twitter.com https://cdn.syndication.twimg.com; connect-src 'self' https://msgstore.www.notion.so wss://msgstore.www.notion.so ws://localhost:* ws://127.0.0.1:* https://notion-emojis.s3-us-west-2.amazonaws.com https://s3-us-west-2.amazonaws.com https://s3.us-west-2.amazonaws.com https://notion-production-snapshots-2.s3.us-west-2.amazonaws.com https: http: https://cdn.amplitude.com https://api.amplitude.com https://hkfxbbdzib.notion.so https://api.embed.ly https://js.intercomcdn.com https://api-iam.intercom.io wss://nexus-websocket-a.intercom.io https://logs-01.loggly.com https://cdn.segment.com https://api.segment.io https://analytics.pgncs.notion.so https://api.pgncs.notion.so https://o324374.ingest.sentry.io https://checkout.stripe.com https://js.stripe.com https://cdn.contentful.com https://preview.contentful.com https://images.ctfassets.net https://www2.profitwell.com https://tracking.chilipiper.com https://api.chilipiper.com https://api.unsplash.com https://boards-api.greenhouse.io https://api.statuspage.io https://pgncd.notion.so https://api.statsig.com; font-src 'self' data: https://cdnjs.cloudflare.com https://js.intercomcdn.com; img-src 'self' data: blob: https: https://platform.twitter.com https://syndication.twitter.com https://pbs.twimg.com https://ton.twimg.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://github.githubassets.com https://js.chilipiper.com https://platform.twitter.com https://ton.twimg.com; frame-src https: http:; media-src https: http:"
+								},
+								{
+									"key": "X-WebKit-CSP",
+									"value": "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://gist.github.com https://apis.google.com https://cdn.amplitude.com https://api.amplitude.com https://hkfxbbdzib.notion.so https://widget.intercom.io https://js.intercomcdn.com https://logs-01.loggly.com https://cdn.segment.com https://analytics.pgncs.notion.so https://o324374.ingest.sentry.io https://checkout.stripe.com https://js.stripe.com https://embed.typeform.com https://admin.typeform.com https://public.profitwell.com js.sentry-cdn.com https://js.chilipiper.com https://platform.twitter.com https://cdn.syndication.twimg.com; connect-src 'self' https://msgstore.www.notion.so wss://msgstore.www.notion.so ws://localhost:* ws://127.0.0.1:* https://notion-emojis.s3-us-west-2.amazonaws.com https://s3-us-west-2.amazonaws.com https://s3.us-west-2.amazonaws.com https://notion-production-snapshots-2.s3.us-west-2.amazonaws.com https: http: https://cdn.amplitude.com https://api.amplitude.com https://hkfxbbdzib.notion.so https://api.embed.ly https://js.intercomcdn.com https://api-iam.intercom.io wss://nexus-websocket-a.intercom.io https://logs-01.loggly.com https://cdn.segment.com https://api.segment.io https://analytics.pgncs.notion.so https://api.pgncs.notion.so https://o324374.ingest.sentry.io https://checkout.stripe.com https://js.stripe.com https://cdn.contentful.com https://preview.contentful.com https://images.ctfassets.net https://www2.profitwell.com https://tracking.chilipiper.com https://api.chilipiper.com https://api.unsplash.com https://boards-api.greenhouse.io https://api.statuspage.io https://pgncd.notion.so https://api.statsig.com; font-src 'self' data: https://cdnjs.cloudflare.com https://js.intercomcdn.com; img-src 'self' data: blob: https: https://platform.twitter.com https://syndication.twitter.com https://pbs.twimg.com https://ton.twimg.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://github.githubassets.com https://js.chilipiper.com https://platform.twitter.com https://ton.twimg.com; frame-src https: http:; media-src https: http:"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"258-nR8cSrr3A4mS1zWlKjaHASxX/tQ\""
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								},
+								{
+									"key": "CF-Cache-Status",
+									"value": "DYNAMIC"
+								},
+								{
+									"key": "Expect-CT",
+									"value": "max-age=604800, report-uri=\"https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct\""
+								},
+								{
+									"key": "Server",
+									"value": "cloudflare"
+								},
+								{
+									"key": "CF-RAY",
+									"value": "6e2c1dcfdbf0255c-SJC"
+								},
+								{
+									"key": "Content-Encoding",
+									"value": "gzip"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"object\": \"block\",\n    \"id\": \"4868767d-9029-4b9d-a41b-652ef4c9c7b9\",\n    \"created_time\": \"2021-08-06T17:46:00.000Z\",\n    \"last_edited_time\": \"2022-02-24T22:26:00.000Z\",\n    \"created_by\": {\n        \"object\": \"user\",\n        \"id\": \"6794760a-1f15-45cd-9c65-0dfe42f5135a\"\n    },\n    \"last_edited_by\": {\n        \"object\": \"user\",\n        \"id\": \"92a680bb-6970-4726-952b-4f4c03bff617\"\n    },\n    \"has_children\": false,\n    \"archived\": true,\n    \"type\": \"paragraph\",\n    \"paragraph\": {\n        \"text\": [\n            {\n                \"type\": \"text\",\n                \"text\": {\n                    \"content\": \"hello to you\",\n                    \"link\": null\n                },\n                \"annotations\": {\n                    \"bold\": false,\n                    \"italic\": false,\n                    \"strikethrough\": false,\n                    \"underline\": false,\n                    \"code\": false,\n                    \"color\": \"default\"\n                },\n                \"plain_text\": \"hello to you\",\n                \"href\": null\n            }\n        ]\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete a block",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var url = pm.request.url.toString();\r",
+									"var blockId = url.match(/\\/blocks\\/([^\\/?]+)/)[1];\r",
+									"\r",
+									"var responseBody = pm.response.json();\r",
+									"var resBlockId = responseBody.id.replace(/-/g, '');\r",
+									"pm.test(\"Deleted this id\", function(){\r",
+									"    pm.expect(resBlockId).to.eql(blockId);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Notion-Version",
+								"value": "{{NOTION_VERSION}}",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://api.notion.com/v1/blocks/:id",
+							"protocol": "https",
+							"host": [
+								"api",
+								"notion",
+								"com"
+							],
+							"path": [
+								"v1",
+								"blocks",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "f301ecdfffad4556a95c0433bda9947f"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200 Success - Delete a block",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Notion-Version",
+										"value": "{{NOTION_VERSION}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://api.notion.com/v1/blocks/:id",
+									"protocol": "https",
+									"host": [
+										"api",
+										"notion",
+										"com"
+									],
+									"path": [
+										"v1",
+										"blocks",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{BLOCK_ID}}"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Thu, 24 Feb 2022 22:26:40 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Set-Cookie",
+									"value": "notion_browser_id=aa7fa731-b5ed-4e45-abdd-adb4223f12ce; Domain=www.notion.so; Path=/; Expires=Fri, 24 Feb 2023 22:26:36 GMT; Secure"
+								},
+								{
+									"key": "Set-Cookie",
+									"value": "notion_experiment_device_id=f70a2b27-ed37-4387-93fe-494c9a385a83; Domain=www.notion.so; Path=/; Expires=Fri, 24 Feb 2023 22:26:36 GMT; Secure"
+								},
+								{
+									"key": "Set-Cookie",
+									"value": "notion_check_cookie_consent=false; Domain=www.notion.so; Path=/; Expires=Fri, 25 Feb 2022 22:26:36 GMT; Secure"
+								},
+								{
+									"key": "X-DNS-Prefetch-Control",
+									"value": "off"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "SAMEORIGIN"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=5184000; includeSubDomains"
+								},
+								{
+									"key": "X-Download-Options",
+									"value": "noopen"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Content-Security-Policy",
+									"value": "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://gist.github.com https://apis.google.com https://cdn.amplitude.com https://api.amplitude.com https://hkfxbbdzib.notion.so https://widget.intercom.io https://js.intercomcdn.com https://logs-01.loggly.com https://cdn.segment.com https://analytics.pgncs.notion.so https://o324374.ingest.sentry.io https://checkout.stripe.com https://js.stripe.com https://embed.typeform.com https://admin.typeform.com https://public.profitwell.com js.sentry-cdn.com https://js.chilipiper.com https://platform.twitter.com https://cdn.syndication.twimg.com; connect-src 'self' https://msgstore.www.notion.so wss://msgstore.www.notion.so ws://localhost:* ws://127.0.0.1:* https://notion-emojis.s3-us-west-2.amazonaws.com https://s3-us-west-2.amazonaws.com https://s3.us-west-2.amazonaws.com https://notion-production-snapshots-2.s3.us-west-2.amazonaws.com https: http: https://cdn.amplitude.com https://api.amplitude.com https://hkfxbbdzib.notion.so https://api.embed.ly https://js.intercomcdn.com https://api-iam.intercom.io wss://nexus-websocket-a.intercom.io https://logs-01.loggly.com https://cdn.segment.com https://api.segment.io https://analytics.pgncs.notion.so https://api.pgncs.notion.so https://o324374.ingest.sentry.io https://checkout.stripe.com https://js.stripe.com https://cdn.contentful.com https://preview.contentful.com https://images.ctfassets.net https://www2.profitwell.com https://tracking.chilipiper.com https://api.chilipiper.com https://api.unsplash.com https://boards-api.greenhouse.io https://api.statuspage.io https://pgncd.notion.so https://api.statsig.com; font-src 'self' data: https://cdnjs.cloudflare.com https://js.intercomcdn.com; img-src 'self' data: blob: https: https://platform.twitter.com https://syndication.twitter.com https://pbs.twimg.com https://ton.twimg.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://github.githubassets.com https://js.chilipiper.com https://platform.twitter.com https://ton.twimg.com; frame-src https: http:; media-src https: http:"
+								},
+								{
+									"key": "X-Content-Security-Policy",
+									"value": "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://gist.github.com https://apis.google.com https://cdn.amplitude.com https://api.amplitude.com https://hkfxbbdzib.notion.so https://widget.intercom.io https://js.intercomcdn.com https://logs-01.loggly.com https://cdn.segment.com https://analytics.pgncs.notion.so https://o324374.ingest.sentry.io https://checkout.stripe.com https://js.stripe.com https://embed.typeform.com https://admin.typeform.com https://public.profitwell.com js.sentry-cdn.com https://js.chilipiper.com https://platform.twitter.com https://cdn.syndication.twimg.com; connect-src 'self' https://msgstore.www.notion.so wss://msgstore.www.notion.so ws://localhost:* ws://127.0.0.1:* https://notion-emojis.s3-us-west-2.amazonaws.com https://s3-us-west-2.amazonaws.com https://s3.us-west-2.amazonaws.com https://notion-production-snapshots-2.s3.us-west-2.amazonaws.com https: http: https://cdn.amplitude.com https://api.amplitude.com https://hkfxbbdzib.notion.so https://api.embed.ly https://js.intercomcdn.com https://api-iam.intercom.io wss://nexus-websocket-a.intercom.io https://logs-01.loggly.com https://cdn.segment.com https://api.segment.io https://analytics.pgncs.notion.so https://api.pgncs.notion.so https://o324374.ingest.sentry.io https://checkout.stripe.com https://js.stripe.com https://cdn.contentful.com https://preview.contentful.com https://images.ctfassets.net https://www2.profitwell.com https://tracking.chilipiper.com https://api.chilipiper.com https://api.unsplash.com https://boards-api.greenhouse.io https://api.statuspage.io https://pgncd.notion.so https://api.statsig.com; font-src 'self' data: https://cdnjs.cloudflare.com https://js.intercomcdn.com; img-src 'self' data: blob: https: https://platform.twitter.com https://syndication.twitter.com https://pbs.twimg.com https://ton.twimg.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://github.githubassets.com https://js.chilipiper.com https://platform.twitter.com https://ton.twimg.com; frame-src https: http:; media-src https: http:"
+								},
+								{
+									"key": "X-WebKit-CSP",
+									"value": "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://gist.github.com https://apis.google.com https://cdn.amplitude.com https://api.amplitude.com https://hkfxbbdzib.notion.so https://widget.intercom.io https://js.intercomcdn.com https://logs-01.loggly.com https://cdn.segment.com https://analytics.pgncs.notion.so https://o324374.ingest.sentry.io https://checkout.stripe.com https://js.stripe.com https://embed.typeform.com https://admin.typeform.com https://public.profitwell.com js.sentry-cdn.com https://js.chilipiper.com https://platform.twitter.com https://cdn.syndication.twimg.com; connect-src 'self' https://msgstore.www.notion.so wss://msgstore.www.notion.so ws://localhost:* ws://127.0.0.1:* https://notion-emojis.s3-us-west-2.amazonaws.com https://s3-us-west-2.amazonaws.com https://s3.us-west-2.amazonaws.com https://notion-production-snapshots-2.s3.us-west-2.amazonaws.com https: http: https://cdn.amplitude.com https://api.amplitude.com https://hkfxbbdzib.notion.so https://api.embed.ly https://js.intercomcdn.com https://api-iam.intercom.io wss://nexus-websocket-a.intercom.io https://logs-01.loggly.com https://cdn.segment.com https://api.segment.io https://analytics.pgncs.notion.so https://api.pgncs.notion.so https://o324374.ingest.sentry.io https://checkout.stripe.com https://js.stripe.com https://cdn.contentful.com https://preview.contentful.com https://images.ctfassets.net https://www2.profitwell.com https://tracking.chilipiper.com https://api.chilipiper.com https://api.unsplash.com https://boards-api.greenhouse.io https://api.statuspage.io https://pgncd.notion.so https://api.statsig.com; font-src 'self' data: https://cdnjs.cloudflare.com https://js.intercomcdn.com; img-src 'self' data: blob: https: https://platform.twitter.com https://syndication.twitter.com https://pbs.twimg.com https://ton.twimg.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://github.githubassets.com https://js.chilipiper.com https://platform.twitter.com https://ton.twimg.com; frame-src https: http:; media-src https: http:"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"258-nR8cSrr3A4mS1zWlKjaHASxX/tQ\""
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								},
+								{
+									"key": "CF-Cache-Status",
+									"value": "DYNAMIC"
+								},
+								{
+									"key": "Expect-CT",
+									"value": "max-age=604800, report-uri=\"https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct\""
+								},
+								{
+									"key": "Server",
+									"value": "cloudflare"
+								},
+								{
+									"key": "CF-RAY",
+									"value": "6e2c1dcfdbf0255c-SJC"
+								},
+								{
+									"key": "Content-Encoding",
+									"value": "gzip"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"object\": \"block\",\n    \"id\": \"4868767d-9029-4b9d-a41b-652ef4c9c7b9\",\n    \"created_time\": \"2021-08-06T17:46:00.000Z\",\n    \"last_edited_time\": \"2022-02-24T22:26:00.000Z\",\n    \"created_by\": {\n        \"object\": \"user\",\n        \"id\": \"6794760a-1f15-45cd-9c65-0dfe42f5135a\"\n    },\n    \"last_edited_by\": {\n        \"object\": \"user\",\n        \"id\": \"92a680bb-6970-4726-952b-4f4c03bff617\"\n    },\n    \"has_children\": false,\n    \"archived\": true,\n    \"type\": \"paragraph\",\n    \"paragraph\": {\n        \"text\": [\n            {\n                \"type\": \"text\",\n                \"text\": {\n                    \"content\": \"hello to you\",\n                    \"link\": null\n                },\n                \"annotations\": {\n                    \"bold\": false,\n                    \"italic\": false,\n                    \"strikethrough\": false,\n                    \"underline\": false,\n                    \"code\": false,\n                    \"color\": \"default\"\n                },\n                \"plain_text\": \"hello to you\",\n                \"href\": null\n            }\n        ]\n    }\n}"
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"pm.request.addHeader('Notion-Version : 2022-06-28')",
+					"pm.request.addHeader('Authorization : Bearer secret_hubRpQO9kGAMuFrKN9t7asAKBhlLIrRaNiBkkdHiHXT')"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"pm.test('Response time is less than 500ms', function () {",
+					"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+					"});",
+					"",
+					"pm.test('Content-Type is application/json', function () {",
+					"    pm.response.to.have.header('Content-Type', 'application/json; charset=utf-8');",
+					"});",
+					""
+				]
+			}
+		}
+	]
+}
